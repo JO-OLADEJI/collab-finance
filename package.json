@@ -1,0 +1,22 @@
+{
+  "name": "collab-finance",
+  "version": "1.0.0",
+  "description": "a simple platform that helps users save a fixed amount automatically every week and then one of the members collects the money at the end of every month.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "Joshua Oladeji",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^4.3.3",
+    "express": "^4.17.2",
+    "helmet": "^5.0.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
