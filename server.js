@@ -9,6 +9,7 @@ const app = express();
 const homeRouter = require('./routes/home.js');
 const errorRouter = require('./routes/error.js');
 const userRoutes = require('./routes/user.js');
+const groupRoutes = require('./routes/group.js');
 const connectDB = require('./database/connect.js');
 
 
@@ -25,6 +26,7 @@ connectDB(process.env.DB_URI);
 // routes
 app.use('/', homeRouter);
 app.use('/api/users', userRoutes);
+app.use('/api/groups', groupRoutes);
 app.use('/*', errorRouter);
 
 

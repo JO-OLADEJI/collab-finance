@@ -1,6 +1,5 @@
 const Joi = require('joi');
 
-
 /**
  * 
  * @param {Object} reqBody - body of request contaning the required values
@@ -21,6 +20,27 @@ const validateUser = (reqBody) => {
 }
 
 
+/**
+ * 
+ * @param {Object} reqBody - body of request contaning the required values
+ * @returns {Object} - a { value, error } object: the result of the validation
+ */
+const validateGroup = (reqBody) => {
+  const schema = Joi.object({
+    'admin': Joi.string().length(24).required(true),
+    'name': Joi.string().min(3).max(255).trim().lowercase().required(),
+    'description': Joi.string().min(24).max(1024).trim().lowercase().required(),
+    'maximumCapacity': Joi.number().min(1).max(256).required(),
+    'members': Joi.array().min(1).max(256).required(),
+    'startDate': Joi.date().required(true),
+    'isSearchable': Joi.boolean().required()
+  });
+
+  return schema.validate(reqBody);
+}
+
+
 module.exports = {
-  validateUser
+  validateUser,
+  validateGroup
 }

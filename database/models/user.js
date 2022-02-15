@@ -57,6 +57,12 @@ const userSchema = mongoose.Schema({
     maxlength: 255
   },
 
+  'invites': {
+    type: [mongoose.Schema.Types.ObjectId], // an array of objectIDs
+    required: false,
+    ref: 'groups'
+  },
+
   'timestamp': {
     type: Date,
     default: Date.now
