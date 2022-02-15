@@ -26,14 +26,14 @@ class UserController {
   getOne = async (req, res) => {
     try {
       const requestedUser = await User.findById(req.params.id);
-      if (!requestedUser) return res.status(400).json({
+      if (!requestedUser) return res.status(404).json({
         'success': false,
         'result': null,
         'error': 'User not found for the given ID ❗'
       });
 
       res.json({
-        'success': false,
+        'success': true,
         'result': requestedUser,
         'error': null
       });
@@ -83,12 +83,92 @@ class UserController {
 
 
   updateOne = async (req, res) => {
-    res.send('updating user with given ID . . .');
+    try {
+      const requestedUser = await User.findById(req.params.id);
+      if (!requestedUser) return res.status(404).json({
+        'success': false,
+        'result': null,
+        'error': 'User with the given ID was not found ❗'
+      });
+
+      const { firstname, lastname, phone, email, gender } = req.body;
+
+      // prepare an object to be validated
+      const proposedUpdate = {
+        'firstname': firstname || requestedUser.firstname,
+        'lastname': lastname || requestedUser.lastname,
+        'username': (requestedUser.username).toString().substring(1),
+        'phone': phone || requestedUser.phone,
+        'email': email || requestedUser.email,
+        'gender': gender || requestedUser.gender,
+        'password': requestedUser.password
+      };
+
+      // validate the request
+      const { value, error } = validateUser(proposedUpdate);
+      if (error) return res.status(400).json({
+        'success': false,
+        'result': null,
+        'error': error['details'][0]['message']
+      });
+
+      // update the user
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id, 
+        {
+          $set: { 
+            firstname: value.firstname,
+            lastname: value.lastname,
+            username: `@${value.username}`,
+            phone: value.phone,
+            email: value.email,
+            gender: value.gender
+          },
+          $inc: {
+            __v: 1 
+          }
+        },
+        { new: true }
+      );
+
+      res.json({
+        'success': true,
+        'result': updatedUser,
+        'error': null
+      });
+    }
+    catch (exc) {
+      res.json({
+        'success': false,
+        'result': null,
+        'error': exc.message
+      });
+    }
   }
 
 
   deletOne = async (req, res) => {
-    res.send('deleting user with given ID . . .');
+    try {
+      const deletedUser = await User.findByIdAndDelete(req.params.id);
+      if (!deletedUser) return res.status(400).json({
+        'success': false,
+        'result': null,
+        'error': 'User not found for the given ID ❗'
+      });
+
+      res.json({
+        'success': true,
+        'result': deletedUser,
+        'error': null
+      });
+    }
+    catch (exc) {
+      res.json({
+        'success': false,
+        'result': null,
+        'error': exc.message
+      });
+    }
   }
 
 }
