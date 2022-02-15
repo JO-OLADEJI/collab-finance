@@ -1,3 +1,5 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -6,6 +8,7 @@ const app = express();
 
 const homeRouter = require('./routes/home.js');
 const errorRouter = require('./routes/error.js');
+const connectDB = require('./database/connect.js');
 
 
 // middlewares
@@ -15,6 +18,7 @@ app.use(morgan('short'));
 
 
 // connect DB
+connectDB(process.env.DB_URI);
 
 
 // routes
