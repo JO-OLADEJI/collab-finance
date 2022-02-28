@@ -25,4 +25,4 @@ npm run dev
 
 - The server should be listening for request on http://localhost:3001
 
-🚧 still in development.
+🚧 actively in development.
