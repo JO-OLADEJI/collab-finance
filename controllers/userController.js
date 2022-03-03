@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const _ = require('lodash');
 const User = require('../database/models/user.js');
 const { validateUser } = require('../utils/validate.js');
 const responseController = require('./responseController.js');
@@ -26,10 +27,16 @@ class UserController {
 
       // create a json web token for the user
       user = new User(value);
+      const token = user.generateAuthToken();
       await user.save();
 
       // return the user object (-password) and jwt header
-      return res.status(201).json(responseController.response(user));
+      res
+        .status(201)
+        .header('X-auth-token', token)
+        .json(responseController.response(
+          _.pick(user, ['_id', 'firstname', 'lastname', 'username', 'email', 'gender', 'pendingGroupInvites']))
+        );
     }
     catch (exception) {
       next({ 'code': 500, 'message': exception.message });

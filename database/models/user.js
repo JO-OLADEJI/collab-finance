@@ -1,4 +1,7 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 const userSchema = mongoose.Schema({
   'firstname': {
@@ -26,7 +29,7 @@ const userSchema = mongoose.Schema({
     maxlength: 255,
     lowercase: true,
     trim: true,
-    match: /^[a-z0-9]+$/i,
+    match: /^@[a-z0-9]+$/i,
     unique: true
   },
 
@@ -65,6 +68,11 @@ const userSchema = mongoose.Schema({
   }
 
 });
+
+userSchema.methods.generateAuthToken = function() {
+  const token = jwt.sign({ '_id': this._id, 'admin': false }, process.env.JWT_SECRET);
+  return token;
+}
 
 const User = mongoose.model('users', userSchema);
 module.exports = User;
