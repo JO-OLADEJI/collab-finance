@@ -7,27 +7,33 @@ const responseController = require('./responseController.js');
 class UserController {
 
   signUp = async (req, res, next) => {
-    // validate the body of the request
-    const { value, error } = validateUser(req.body);
-    if (error) return next({ 'code': 400, 'message': error['details'][0]['message'] });
+    try {
+      // validate the body of the request
+      const { value, error } = validateUser(req.body);
+      if (error) return next({ 'code': 400, 'message': error['details'][0]['message'] });
 
-    // check if email or username exists before
-    let user = await User.findOne({ 'username': value.username });
-    if (user) return next({ 'code': 400, 'message': 'Username already exists' });
-    user = await User.findOne({ 'email': value.email });
-    if (user) return next({ 'code': 400, 'message': 'Email already exists' });
-    
-    // hash the password
-    const salt = await bcrypt.genSalt(11);
-    const hashedPassword = await bcrypt.hash(value.password, salt);
-    value.password = hashedPassword;
+      // check if email or username exists before
+      let user = await User.findOne({ 'username': value.username });
+      if (user) return next({ 'code': 400, 'message': 'Username already exists' });
+      user = await User.findOne({ 'email': value.email });
+      if (user) return next({ 'code': 400, 'message': 'Email already exists' });
+      
+      // hash the password
+      const salt = await bcrypt.genSalt(11);
+      const hashedPassword = await bcrypt.hash(value.password, salt);
+      value.password = hashedPassword;
+      value.username = `@${value.username}`
 
-    // create a json web token for the user
-    user = new User(value);
-    await user.save();
+      // create a json web token for the user
+      user = new User(value);
+      await user.save();
 
-    // return the user object (-password) and jwt header
-    return res.status(201).json(responseController.response(user));
+      // return the user object (-password) and jwt header
+      return res.status(201).json(responseController.response(user));
+    }
+    catch (exception) {
+      next({ 'code': 500, 'message': exception.message });
+    }
   }
 
 
@@ -46,9 +52,23 @@ class UserController {
   }
 
 
-  // method for smooth UX in frontend
-  usernameExists = async (req, res) => {
-    // return a boolean
+  // method for smooth UX in frontend - to update the user in real time if their username is valid
+  usernameExists = async (req, res, next) => {
+    if (!req.body['username']) {
+      next({ 'code': 400, 'message': 'Empty username sent'});
+    }
+    else if ((req.body['username']).length < 4) {
+      next({ 'code': 400, 'message': 'Username should be more than 4 characters' });
+    }
+
+    try {
+      const user = await User.findOne({ 'username': `@${req.body['username']}` });
+      if (user) return res.status(400).send(true);
+      res.status(200).send(false);
+    }
+    catch (exception) {
+      next({ 'code': 500, 'message': exception.message });
+    }
   }
 
   // getAll = async (req, res) => {

@@ -26,7 +26,7 @@ const userSchema = mongoose.Schema({
     maxlength: 255,
     lowercase: true,
     trim: true,
-    match: /^@[a-z0-9]+$/i,
+    match: /^[a-z0-9]+$/i,
     unique: true
   },
 
