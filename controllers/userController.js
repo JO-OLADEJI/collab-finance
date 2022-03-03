@@ -15,9 +15,9 @@ class UserController {
 
       // check if email or username exists before
       let user = await User.findOne({ 'username': value.username });
-      if (user) return next({ 'code': 400, 'message': 'Username already exists' });
+      if (user) return next({ 'code': 400, 'message': 'username already exists' });
       user = await User.findOne({ 'email': value.email });
-      if (user) return next({ 'code': 400, 'message': 'Email already exists' });
+      if (user) return next({ 'code': 400, 'message': 'email already exists' });
       
       // hash the password
       const salt = await bcrypt.genSalt(11);
@@ -62,14 +62,14 @@ class UserController {
         user = await User.findOne({ 'username': value.username[0] == '@' ? value.username : `@${value.username}` });
       }
       else {
-        return next({ 'code': 400, 'message': 'Email or username must be provided' });
+        return next({ 'code': 400, 'message': 'email or username must be provided' });
       }
 
-      if (!user) return next({ 'code': 400, 'message': `Invalid ${loginMethod} or password` });
+      if (!user) return next({ 'code': 400, 'message': `invalid ${loginMethod} or password` });
 
       // compare password to hash
       const match = await bcrypt.compare(value['password'], user['password']);
-      if (!match) return next({ 'code': 400, 'message': `Invalid ${loginMethod} or password` });
+      if (!match) return next({ 'code': 400, 'message': `invalid ${loginMethod} or password` });
 
       // create a json web token for the user
       const token = user.generateAuthToken();
@@ -88,20 +88,32 @@ class UserController {
   }
 
 
-  profile = async (req, res) => {
-    // validate the json web token sent through a middleware
-    // get the id
-    // return the user (-password) to the user
+  profile = async (req, res, next) => {
+    // get the id sent from the auth middleware
+    const { _id } = req.user;
+
+    try {
+      const user = await User.findById(_id);
+      if (!user) return next({ 'code': 500, 'message': 'user not found' });
+      res
+        .status(200)
+        .json(responseController.response(
+          _.pick(user, ['_id', 'firstname', 'lastname', 'username', 'email', 'gender', 'pendingGroupInvites']))
+        );
+    }
+    catch (exception) {
+      next({ 'code': 500, 'message': exception.message });
+    }
   }
 
 
   // method for smooth UX in frontend - to update the user in real time if their username is valid
   usernameExists = async (req, res, next) => {
     if (!req.body['username']) {
-      next({ 'code': 400, 'message': 'Empty username sent'});
+      next({ 'code': 400, 'message': 'empty username sent'});
     }
     else if ((req.body['username']).length < 4) {
-      next({ 'code': 400, 'message': 'Username should be more than 4 characters' });
+      next({ 'code': 400, 'message': 'username should be more than 4 characters' });
     }
 
     try {

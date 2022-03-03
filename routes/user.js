@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController.js');
 const groupController = require('../controllers/groupController.js');
+const { auth } = require('../utils/auth.js');
 
 
 router.post('/login', userController.login);
 router.post('/signup', userController.signUp);
-router.get('/me', userController.profile);
+router.get('/me', auth, userController.profile);
 router.all('/doesUsernameExist', userController.usernameExists);
 
 // router.get('/', userController.getAll);
