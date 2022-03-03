@@ -11,6 +11,7 @@ const errorRouter = require('./routes/error.js');
 const userRoutes = require('./routes/user.js');
 const groupRoutes = require('./routes/group.js');
 const connectDB = require('./database/connect.js');
+const errorController = require('./controllers/errorController.js')
 
 
 // middlewares
@@ -26,7 +27,12 @@ connectDB(process.env.DB_URI);
 // routes
 app.use('/', homeRouter);
 app.use('/api/users', userRoutes);
-app.use('/api/groups', groupRoutes);
+// app.use('/api/groups', groupRoutes);
+
+// error thrown inside route handlers (controllers)
+app.use(errorController.applicatonError);
+
+
 app.use('/*', errorRouter);
 
 

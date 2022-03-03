@@ -26,13 +26,8 @@ const userSchema = mongoose.Schema({
     maxlength: 255,
     lowercase: true,
     trim: true,
-    match: /^@[a-z0-9]+$/i
-  },
-
-  'phone': {
-    type: String,
-    required: true,
-    match: /^[0-9]{11}$/
+    match: /^@[a-z0-9]+$/i,
+    unique: true
   },
 
   'email': {
@@ -40,7 +35,8 @@ const userSchema = mongoose.Schema({
     required: true,
     minlength: 9,
     maxlength: 255,
-    match: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    match: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    unique: true
   },
 
   'gender': {
@@ -57,7 +53,7 @@ const userSchema = mongoose.Schema({
     maxlength: 255
   },
 
-  'invites': {
+  'pendingGroupInvites': {
     type: [mongoose.Schema.Types.ObjectId], // an array of objectIDs
     required: false,
     ref: 'groups'

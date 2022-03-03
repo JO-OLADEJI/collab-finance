@@ -1,11 +1,23 @@
 class ErrorController {
 
   invalidRoute = (req, res) => {
-    res.status(404).json({
-      'success': false,
-      'result': null,
-      'error': 'Error: invalid route ❗'
-    });
+    return res
+      .status(404)
+      .json({
+        'result': false,
+        'data': null,
+        'error': 'Invalid route ❗'
+      });
+  }
+
+  applicatonError = (err, req, res, next) => {
+    return res
+      .status(err['code'])
+      .json({
+        'result': false,
+        'data': null,
+        'error': err['message'] + ' ❗'
+      });
   }
 
 }
