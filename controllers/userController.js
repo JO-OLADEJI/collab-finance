@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const User = require('../database/models/user.js');
-const { validateUser } = require('../utils/validate.js');
+const { validateUser, validateLogin } = require('../utils/validate.js');
 const responseController = require('./responseController.js');
 
 
@@ -44,11 +44,47 @@ class UserController {
   }
 
 
-  login = async (req, res) => {
+  login = async (req, res, next) => {
     // validate the request of the body [username/email and password]
-    // compare password to hash
-    // create a json web token for the user
-    // return the user object and jwt header
+    const { value, error } = validateLogin(req.body);
+    if (error) return next({ 'code': 400, 'message': error['details'][0]['message'] });
+
+    try {
+      // check if the login method of the user - either username or email
+      let loginMethod = null;
+      let user = null;
+      if (value['email']) {
+        loginMethod = 'email';
+        user = await User.findOne({ 'email': value.email });
+      }
+      else if (value['username']) {
+        loginMethod = 'username';
+        user = await User.findOne({ 'username': value.username[0] == '@' ? value.username : `@${value.username}` });
+      }
+      else {
+        return next({ 'code': 400, 'message': 'Email or username must be provided' });
+      }
+
+      if (!user) return next({ 'code': 400, 'message': `Invalid ${loginMethod} or password` });
+
+      // compare password to hash
+      const match = await bcrypt.compare(value['password'], user['password']);
+      if (!match) return next({ 'code': 400, 'message': `Invalid ${loginMethod} or password` });
+
+      // create a json web token for the user
+      const token = user.generateAuthToken();
+
+      // return the user object and jwt header
+      res
+        .status(200)
+        .header('X-auth-token', token)
+        .json(responseController.response(
+          _.pick(user, ['_id', 'firstname', 'lastname', 'username', 'email', 'gender', 'pendingGroupInvites']))
+        );
+    }
+    catch (exception) {
+      next({ 'code': 500, 'message': exception.message });
+    }
   }
 
 

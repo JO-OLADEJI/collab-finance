@@ -39,7 +39,19 @@ const validateGroup = (reqBody) => {
 }
 
 
+const validateLogin = (reqBody) => {
+  const schema = Joi.object({
+    'email': Joi.string().email().min(9).max(255).trim(),
+    'username': Joi.string().min(4).max(255).lowercase().trim(),
+    'password': Joi.string().required().min(6).max(255).lowercase().trim()
+  });
+
+  return schema.validate(reqBody);
+}
+
+
 module.exports = {
   validateUser,
-  validateGroup
+  validateGroup,
+  validateLogin
 }
