@@ -1,39 +1,18 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const debug = require('debug')('app:start');
 const app = express();
-
-const homeRouter = require('./routes/home.js');
-const errorRouter = require('./routes/error.js');
-const userRoutes = require('./routes/user.js');
-const groupRoutes = require('./routes/group.js');
-const connectDB = require('./database/connect.js');
-const errorController = require('./controllers/errorController.js')
-
-
-// middlewares
-app.use(express.json());
-app.use(helmet());
-app.use(morgan('short'));
+const debug = require('debug')('app:start');
+const connectDB = require('./utils/connect.js');
+const pipeline = require('./utils/pipeline.js');
 
 
 // connect DB
 connectDB(process.env.DB_URI);
 
 
-// routes
-app.use('/', homeRouter);
-app.use('/api/users', userRoutes);
-// app.use('/api/groups', groupRoutes);
-
-// error thrown inside route handlers (controllers)
-app.use(errorController.applicatonError);
-
-
-app.use('/*', errorRouter);
+// application pipeline
+pipeline(app);
 
 
 // setup for listening

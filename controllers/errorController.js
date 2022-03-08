@@ -6,7 +6,7 @@ class ErrorController {
       .json({
         'result': false,
         'data': null,
-        'error': 'Invalid route ❗'
+        'error': 'invalid route ❗'
       });
   }
 
