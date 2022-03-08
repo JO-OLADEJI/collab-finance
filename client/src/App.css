@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Cookie&family=Fredoka:wght@300;400;500;600;700&family=Satisfy&display=swap');
+
+:root {
+  --green: #005841;
+  --deep-green: #003924;
+  --green-accent: #009160;
+  --yellow: #E6DC44;
+  --deep-yellow: #AF9500;
+  --yellow-accent: #EEE989;
+  --grey-accent: #f1f1f1;
+  --grey: #5f5f5f;
+  --deep-grey: #2c2c2c;
+  --black: #000000;
+  --white: #ffffff;
+}
+
 * {
   margin: 0;
   padding: 0;

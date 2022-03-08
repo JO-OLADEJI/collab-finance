@@ -1,8 +1,8 @@
 .signup {
-  width: 98%;
+  width: 60%;
   margin: auto;
-  height: 96vh;
-  margin-top: 2vh;
+  height: 80vh;
+  margin-top: 10vh;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -11,16 +11,116 @@
 .signup-illustration {
   width: 40%;
   height: 100%;
-  border: 1px solid red;
+  padding: 2rem;
+  z-index: 2;
+  background-color: var(--yellow-accent);
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
 }
 
 .signup-form {
   width: 60%;
   height: 100%;
-  border: 1px solid red;
+  font-family: 'Fredoka', sans-serif;
+  padding: 3rem 4rem;
+  position: relative;
+  background-color: var(--grey-accent);
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 }
 
 .signup-graphic {
-  width: 20rem;
+  max-width: 130%;
+  margin-top: 2rem;
+  display: block;
 }
 
+.signup-logo {
+  text-decoration: none;
+  font-family: 'Satisfy', cursive;
+  margin-bottom: 2rem;
+  display: inline-block;
+  font-size: 1.2rem;
+}
+
+.signup-statement {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #2c2c2c;
+}
+
+.signup-form > h3 {
+  font-family: 'Fredoka', sans-serif;
+  margin-bottom: 1rem;
+}
+
+.signup-input-wrapper label {
+  font-size: .8rem;
+  color: var(--grey);
+}
+
+.signup-input-wrapper input {
+  border: none;
+  border-bottom: 2px solid var(--grey);
+  border-right: 2px solid transparent;
+  padding: .2rem;
+  width: 20rem;
+  transition: border .2s ease-out;
+  font-family: inherit;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--green);
+  background-color: transparent;
+}
+
+::placeholder {
+  color: var(--grey);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 400;
+}
+
+.signup-input-wrapper input:hover {
+  border-bottom: 2px solid var(--black);
+}
+
+.signup-input-wrapper input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--deep-yellow);
+}
+
+.signup-input-wrapper {
+  margin-bottom: .8rem;
+}
+
+.signup-form button {
+  border: none;
+  padding: .8rem 1.5rem;
+  border-radius: 2rem;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: .9rem;
+  color: var(--yellow);
+  background-color: var(--green);
+  margin-top: 1rem;
+  margin-bottom: .5rem;
+  cursor: pointer;
+  border: 2px solid var(--green);
+  transition: all .3s ease-out;
+}
+
+.signup-form button:hover {
+  background-color: transparent;
+  color: var(--black);
+}
+
+.signup-form > p {
+  font-size: .8rem;
+}
+
+.signup-form > p a {
+  text-decoration: none;
+  display: inline-block;
+  margin-left: .2rem;
+  font-weight: bold;
+}

@@ -21,7 +21,7 @@ const SignUP = (props) => {
           <h3>collab finance</h3>
         </Link>
         <p className="signup-statement">
-          Start your journey to raise capital for your business
+          Begin your journey to raise capital for your businesses & projects.
         </p>
         <img
           src={graphic}
@@ -30,8 +30,8 @@ const SignUP = (props) => {
         />
       </div>
 
-      <div className="signup-form">
-        <h3>Create an account.</h3>
+      <form className="signup-form" autoComplete="off">
+        <h3>Create your account.</h3>
         <div className="signup-names-space">
           <div className="signup-input-wrapper">
             <label>
@@ -94,10 +94,13 @@ const SignUP = (props) => {
             />
           </label>
         </div>
-        <button onClick={(e) => {
-          e.preventDefault();
-          console.log('call the API here');
-        }}>
+        <button 
+          onClick={(e) => {
+            e.preventDefault();
+            console.log('call the API here');
+          }}
+          type="submit"
+        >
           Create Account
         </button>
 
@@ -107,7 +110,7 @@ const SignUP = (props) => {
             sign in
           </Link>
         </p>
-      </div>
+      </form>
     </section>
   );
 }
