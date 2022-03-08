@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
-const User = require('../models/user.js');
+const { User } = require('../models/user.js');
 const { validateUser, validateLogin } = require('../utils/validate.js');
 const responseController = require('./responseController.js');
 

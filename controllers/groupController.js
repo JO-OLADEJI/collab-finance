@@ -1,5 +1,5 @@
 const Group = require('../models/group.js');
-const User = require('../models/user.js');
+const { User } = require('../models/user.js');
 const { validateGroup } = require('../utils/validate.js');
 
 
