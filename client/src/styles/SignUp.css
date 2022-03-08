@@ -1,0 +1,26 @@
+.signup {
+  width: 98%;
+  margin: auto;
+  height: 96vh;
+  margin-top: 2vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.signup-illustration {
+  width: 40%;
+  height: 100%;
+  border: 1px solid red;
+}
+
+.signup-form {
+  width: 60%;
+  height: 100%;
+  border: 1px solid red;
+}
+
+.signup-graphic {
+  width: 20rem;
+}
+
