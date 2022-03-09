@@ -41,6 +41,7 @@
   margin-bottom: 2rem;
   display: inline-block;
   font-size: 1.2rem;
+  color: var(--purple-accent);
 }
 
 .signup-statement {
@@ -91,6 +92,8 @@
 
 .signup-input-wrapper {
   margin-bottom: .8rem;
+  /* border: 1px solid red; */
+  width: fit-content;
 }
 
 .signup-form button {
@@ -118,9 +121,81 @@
   font-size: .8rem;
 }
 
+.signup-form > p i {
+  font-size: .7rem;
+}
+
 .signup-form > p a {
   text-decoration: none;
   display: inline-block;
   margin-left: .2rem;
   font-weight: bold;
+  color: var(--green);
+  transition: color .5s ease-out;
+}
+
+.signup-form > p a:hover {
+  color: var(--purple-accent);
+}
+
+.back-link {
+  position: absolute;
+  top: .5rem;
+  right: 1rem;
+  font-size: .8rem;
+  font-weight: bold;
+}
+
+.back-link a {
+  color: var(--green);
+  text-decoration: none;
+  transition: color .5s ease-out;
+}
+
+.back-link a:hover {
+  color: var(--purple-accent);
+}
+
+.back-link a:hover #left-arrow {
+  transform: translateX(-1rem);
+}
+
+.back-link i {
+  font-size: .6rem;
+  display: inline-block;
+  transition: transform .3s ease-out;
+}
+
+.password-wrapper i {
+  cursor: pointer;
+  transition: color .3s ease-out;
+  /* transform: translateX(-100%); */
+  position: relative;
+  left: -1.2rem;
+}
+
+#sign-up-validation-error {
+  color: red;
+  text-align: center;
+  margin-top: .5rem;
+  font-size: .9rem;
+}
+
+.username-wrapper i {
+  /* transform: translateX(-100%); */
+  position: relative;
+  left: -1rem;
+}
+
+.username-wrapper .fa-spinner {
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotateZ(0);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
 }

@@ -9,10 +9,36 @@ const SignUP = (props) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordType, setPasswordType] = useState('password');
+  const [validationError, setValidationError] = useState('');
+  const [isUsernameValid, setIsUsernameValid] = useState(false);
 
   useEffect(() => {
     document.title = 'Sign up | Collab Finance';
   }, []);
+
+  const renderUsernameFeedback = () => {
+    if (username.length === 0 && !isUsernameValid) {
+      return (<i 
+        className="fa-solid fa-check"
+        style={{ color: '#5f5f5f' }}
+      />);
+    }
+    else if (!isUsernameValid) { /* check if it's communicating to the API */
+      return (<i 
+        className="fa-solid fa-spinner"
+        style={{ color: '#5f5f5f' }}
+      />);
+    }
+    else if (isUsernameValid) {
+      return (<i 
+        className="fa-solid fa-check"
+        style={{ color: '#009160' }}
+      />);
+    }
+    // check if the API returns the username as invalid
+    // return <i className="fa-solid fa-xmark" />
+  }
 
   return (
     <section className="signup">
@@ -58,17 +84,23 @@ const SignUP = (props) => {
             </label>
           </div>
         </div>
-        <div className="signup-input-wrapper">
+        <div className="signup-input-wrapper username-wrapper">
           <label>
             username
             <br />
             <input 
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="@johnsmith"
+              onChange={(e) => {
+                setUsername((e.target.value).trim());
+                if (username.length >= 4) {
+                  // send validation request to the API
+                }
+              }}
+              placeholder="@johnsmith - min. of 4 letters"
             />
           </label>
+          {renderUsernameFeedback()}
         </div>
         <div className="signup-input-wrapper">
           <label>
@@ -82,17 +114,22 @@ const SignUP = (props) => {
             />
           </label>
         </div>
-        <div className="signup-input-wrapper">
+        <div className="signup-input-wrapper password-wrapper">
           <label>
             password
             <br />
             <input 
-              type="password"
+              type={passwordType}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="******"
             />
           </label>
+          <i 
+            className="fa-solid fa-eye-slash"
+            onClick={() => setPasswordType(() => passwordType === 'password' ? 'text' : 'password')}
+            style={{ color: passwordType === 'password' ? '#5f5f5f' : '#000000' }}
+          />
         </div>
         <button 
           onClick={(e) => {
@@ -107,9 +144,16 @@ const SignUP = (props) => {
         <p>
           Already have an accout? 
           <Link to="/signin">
-            sign in
+            sign in <i className="fa-solid fa-user" />
           </Link>
         </p>
+        <div className="back-link">
+          <Link to="/">
+            <i id="left-arrow" className="fa-solid fa-chevron-left" /> back
+          </Link>
+        </div>
+
+        <p id="sign-up-validation-error">{validationError}</p>
       </form>
     </section>
   );
