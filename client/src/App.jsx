@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import { Switch, Route } from 'react-router-dom';
 import SignUP from './components/SignUp.jsx';
+import SignIn from './components/SignIn.jsx';
 import Landing from './components/Landing.jsx';
 
 const App = () => {
@@ -15,6 +16,10 @@ const App = () => {
 
         <Route path='/signup'>
           <SignUP />
+        </Route>
+
+        <Route>
+          <SignIn />
         </Route>
 
       </Switch>

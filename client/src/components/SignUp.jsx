@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import '../styles/SignUp.css';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import graphic from '../assets/signup-graphic.png';
+import illustration from '../assets/signup-graphic.png';
+
 
 const SignUP = (props) => {
   const [firstname, setFirstname] = useState('');
@@ -58,10 +59,10 @@ const SignUP = (props) => {
           </motion.h3>
         </Link>
         <p className="signup-statement">
-          Begin your journey to raise capital for your businesses & projects.
+          Begin your journey to raise capital for your business goals.
         </p>
         <motion.img
-          src={graphic}
+          src={illustration}
           alt="depiction of graph and checkmark"
           className="signup-graphic"
           initial={{ y: '-100vh', scale: 1.5 }}
@@ -159,7 +160,7 @@ const SignUP = (props) => {
         </motion.button>
 
         <p>
-          Already have an accout? 
+          Already have an account? 
           <Link to="/signin">
             sign in <i className="fa-solid fa-user" />
           </Link>
