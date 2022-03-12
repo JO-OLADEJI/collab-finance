@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/SignUp.css';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import graphic from '../assets/signup-graphic.png';
 
 const SignUP = (props) => {
@@ -41,18 +42,31 @@ const SignUP = (props) => {
   }
 
   return (
-    <section className="signup">
+    <motion.section 
+      className="signup"
+      initial={{ x: '-50vw' }}
+      animate={{ x: 0 }}
+      transition={{ type: 'spring', stiffness: 200 }}
+    >
       <div className="signup-illustration">
         <Link to="/" className="signup-logo">
-          <h3>collab finance</h3>
+          <motion.h3 
+            whileHover={{ scale: 1.1 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
+            collab finance
+          </motion.h3>
         </Link>
         <p className="signup-statement">
           Begin your journey to raise capital for your businesses & projects.
         </p>
-        <img
+        <motion.img
           src={graphic}
           alt="depiction of graph and checkmark"
           className="signup-graphic"
+          initial={{ y: '-100vh', scale: 1.5 }}
+          animate={{ y: 0, scale: 1 }}
+          transition={{ type: 'spring', stiffness: 150, delay: 0.7, duration: 0.5 }}
         />
       </div>
 
@@ -131,15 +145,18 @@ const SignUP = (props) => {
             style={{ color: passwordType === 'password' ? '#5f5f5f' : '#000000' }}
           />
         </div>
-        <button 
+        <motion.button 
           onClick={(e) => {
             e.preventDefault();
             console.log('call the API here');
           }}
           type="submit"
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 1.5 }}
         >
           Create Account
-        </button>
+        </motion.button>
 
         <p>
           Already have an accout? 
@@ -147,15 +164,20 @@ const SignUP = (props) => {
             sign in <i className="fa-solid fa-user" />
           </Link>
         </p>
-        <div className="back-link">
+        <motion.div 
+          className="back-link"
+          initial={{ x: '50vw' }}
+          animate={{ x: 0 }}
+          transition={{ type: 'spring', stiffness: 130, delay: 1 }}
+        >
           <Link to="/">
             <i id="left-arrow" className="fa-solid fa-chevron-left" /> back
           </Link>
-        </div>
+        </motion.div>
 
         <p id="sign-up-validation-error">{validationError}</p>
       </form>
-    </section>
+    </motion.section>
   );
 }
  
