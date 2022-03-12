@@ -9,7 +9,7 @@ const Landing = (props) => {
   return (
     <section>
       <h1>Welcome to Collab Finance 💰</h1>
-      <Link to="/signup">signup</Link>
+      <Link to="/signin">sign-in</Link>
     </section>
   );
 }
