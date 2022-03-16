@@ -1,23 +1,17 @@
+const error = require('../utils/error.js');
+
 class ErrorController {
 
   invalidRoute = (req, res) => {
     return res
       .status(404)
-      .json({
-        'result': false,
-        'data': null,
-        'error': 'invalid route ❗'
-      });
+      .json(error('invalid route'));
   }
 
   applicatonError = (err, req, res, next) => {
     return res
       .status(err['code'])
-      .json({
-        'result': false,
-        'data': null,
-        'error': err['message'] + ' ❗'
-      });
+      .json(error(err['message']));
   }
 
 }

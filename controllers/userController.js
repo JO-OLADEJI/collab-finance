@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const { User } = require('../models/user.js');
 const { validateUser, validateLogin } = require('../utils/validate.js');
-const responseController = require('./responseController.js');
+const response = require('../utils/response.js');
 
 
 class UserController {
@@ -34,7 +34,7 @@ class UserController {
       res
         .status(201)
         .header('X-auth-token', token)
-        .json(responseController.response(
+        .json(response(
           _.pick(user, ['_id', 'firstname', 'lastname', 'username', 'email', 'gender', 'pendingGroupInvites']))
         );
     }
@@ -78,7 +78,7 @@ class UserController {
       res
         .status(200)
         .header('X-auth-token', token)
-        .json(responseController.response(
+        .json(response(
           _.pick(user, ['_id', 'firstname', 'lastname', 'username', 'email', 'gender', 'pendingGroupInvites']))
         );
     }
@@ -97,7 +97,7 @@ class UserController {
       if (!user) return next({ 'code': 500, 'message': 'user not found' });
       res
         .status(200)
-        .json(responseController.response(
+        .json(response(
           _.pick(user, ['_id', 'firstname', 'lastname', 'username', 'email', 'gender', 'pendingGroupInvites']))
         );
     }
@@ -117,9 +117,9 @@ class UserController {
     }
 
     try {
-      const user = await User.findOne({ 'username': `@${req.body['username']}` });
-      if (user) return res.status(400).send(true);
-      res.status(200).send(false);
+      const user = await User.findOne({ 'username': req.body['username'][0] == '@' ? req.body['username'] : `@${req.body['username']}` });
+      if (user) return res.status(400).json(response(true));
+      res.status(200).json(response(false));
     }
     catch (exception) {
       next({ 'code': 500, 'message': exception.message });

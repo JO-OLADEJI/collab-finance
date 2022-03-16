@@ -1,11 +1,9 @@
+const response = require('../utils/response.js');
+
 class HomeController {
 
   welcome = (req, res) => {
-    res.json({
-      'success': true,
-      'result': 'Welcome to Collab Finance 💰',
-      'error': null
-    });
+    res.json(response('Welcome to Collab Finance 💰'));
   }
 
 }

@@ -1,5 +1,4 @@
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const debug = require('debug')('app:start');
@@ -8,7 +7,7 @@ const pipeline = require('./utils/pipeline.js');
 
 
 // connect DB
-connectDB(process.env.DB_URI);
+connectDB();
 
 
 // application pipeline
@@ -17,7 +16,10 @@ pipeline(app);
 
 // setup for listening
 const PORT = process.env.PORT || 3001;
-app.listen(
+const server = app.listen(
   PORT, 
-  () => debug(`Server running on http://localhost:${PORT}`)
+  () => debug(`${process.env.NODE_ENV} server running on http://localhost:${PORT} . . .`)
 );
+
+
+module.exports = server;
