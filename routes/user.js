@@ -5,8 +5,8 @@ const groupController = require('../controllers/groupController.js');
 const { auth } = require('../utils/auth.js');
 
 
+router.post('/', userController.signUp);
 router.post('/login', userController.login);
-router.post('/signup', userController.signUp);
 router.get('/me', auth, userController.profile);
 router.all('/doesUsernameExist', userController.usernameExists);
 
