@@ -40,12 +40,13 @@ describe('/api/users', () => {
       expect(res.status).toBe(409);
     });
 
-    it('should create a new user and respond with a status-code 201 if request body is totally valid', async () => {
+    it('should create and authenticate a new user and respond with a status-code 201 if request body is totally valid', async () => {
       const res = await exec();
 
       expect(res).toBeDefined();
       expect(res.status).toBe(201);
       expect(typeof res.body).toBe('object');
+      expect(res.headers['x-auth-token']).toBeDefined();
       expect(res.body['result']['email']).toBe(user['email']);
     });
 
@@ -53,7 +54,95 @@ describe('/api/users', () => {
 
 
   describe('POST /login', () => {
-    //
+    let credentials;
+    beforeEach(async () => {
+      const user = { 
+        firstname: 'abc', 
+        lastname: 'xyz', 
+        username: 'abcxyz', 
+        email: 'abcxyz@example.com', 
+        gender: 'female', 
+        password: 'abc123xyz' 
+      };
+      credentials = { email: user['email'], password: user['password'] };
+      await request(server).post('/api/users/').send(user); // create a user for credentials to be tested on
+    });
+    const exec = async () => {
+      return await request(server).post('/api/users/login').send(credentials);
+    }
+    
+    
+    it('should return an error with status-code 400 if any login credential is invalid(syntax wise)', async () => {
+      credentials['email'] = 'abcxyz';
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('should return an error with status-code 400 if email is not defined', async () => {
+      credentials['email'] = null;
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('should return an error with a status-code 400 if username is being used for login and it is not defined', async () => {
+      credentials['email'] = undefined;
+      credentials['username'] = null;
+
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('should return an error with a status-code of 400 if username or email is not sent with the request', async () => {
+      credentials['email'] = undefined;
+      credentials['username'] = undefined;
+
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('should return an error with a status-code of 400 if login credentials(password) is not correct', async () => {
+      credentials['password'] = 'abcxyz123';
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('should return an error with a status-code of 400 if login credentials(username) is not correct', async () => {
+      credentials['email'] = undefined;
+      credentials['username'] = 'xyzabc';
+
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('should return an error with a status-code of 400 if login credentials(email) is not correct', async () => {
+      credentials['email'] = 'random@example.com';
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('should authenticate user if credentials(email and password) are valid and correct', async () => {
+      const res = await exec();
+
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(typeof res.body).toBe('object');
+      expect(res.headers['x-auth-token']).toBeDefined();
+      expect(res.body['result']['email']).toBe(credentials['email']);
+    });
+
+    it('should authenticate user if credentials(username and password) are valid and correct', async () => {
+      credentials['email'] = undefined;
+      credentials['username'] = 'abcxyz';
+
+      const res = await exec();
+
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(typeof res.body).toBe('object');
+      expect(res.headers['x-auth-token']).toBeDefined();
+      expect(res.body['result']['username']).toBe('@' + credentials['username']);
+    });
+
   });
 
 

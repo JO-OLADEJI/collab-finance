@@ -33,7 +33,7 @@ class UserController {
       // return the user object (-password) and jwt header
       res
         .status(201)
-        .header('X-auth-token', token)
+        .header('x-auth-token', token)
         .json(response(
           _.pick(user, ['_id', 'firstname', 'lastname', 'username', 'email', 'gender', 'pendingGroupInvites']))
         );
@@ -77,7 +77,7 @@ class UserController {
       // return the user object and jwt header
       res
         .status(200)
-        .header('X-auth-token', token)
+        .header('x-auth-token', token)
         .json(response(
           _.pick(user, ['_id', 'firstname', 'lastname', 'username', 'email', 'gender', 'pendingGroupInvites']))
         );
