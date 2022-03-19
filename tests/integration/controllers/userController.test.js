@@ -70,7 +70,7 @@ describe('/api/users', () => {
     const exec = async () => {
       return await request(server).post('/api/users/login').send(credentials);
     }
-    
+
     
     it('should return an error with status-code 400 if any login credential is invalid(syntax wise)', async () => {
       credentials['email'] = 'abcxyz';
@@ -147,12 +147,71 @@ describe('/api/users', () => {
 
 
   describe('GET /me', () => {
-    //
+    // TODO
   });
 
 
   describe('ALL /doesUsernameExist', () => {
-    //
+    let data;
+    beforeEach(async () => {
+      const user = { 
+        firstname: 'abc', 
+        lastname: 'xyz', 
+        username: 'abcxyz', 
+        email: 'abcxyz@example.com', 
+        gender: 'female', 
+        password: 'abc123xyz' 
+      };
+      data = { username: user['username'] };
+      await request(server).post('/api/users/').send(user); // create a user for credentials to be tested on
+    });
+    const exec = async () => {
+      return await request(server).post('/api/users/doesUsernameExist').send(data);
+    }
+
+
+    it('should return an error with a status-code 400 if username was not sent', async () => {
+      data['username'] = undefined;
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('should return an error with status-code 400 if username is less than 4 characters', async () => {
+      data['username'] = 'abc';
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('should return true if username already exists', async () => {
+      const res = await exec();
+      expect(res.status).toBe(200);
+      expect(res.body['result']).toBe(true);
+    });
+
+    it('should return true if username is prefixed by "@" and already exists', async () => {
+      data['username'] = '@' + data['username'];
+      const res = await exec();
+      
+      expect(res.status).toBe(200);
+      expect(res.body['result']).toBe(true);
+    });
+
+    it('should return false if username does not exist', async () => {
+      data['username'] = 'xyzabc';
+      const res = await exec();
+
+      expect(res.status).toBe(200);
+      expect(res.body['result']).toBe(false);
+    });
+
+    it('should return false if username is prefixed by "@" and does not exist', async () => {
+      data['username'] = '@xyzabc';
+      const res = await exec();
+      
+      expect(res.status).toBe(200);
+      expect(res.body['result']).toBe(false);
+    });
+
   });
 
 });

@@ -109,16 +109,24 @@ class UserController {
 
   // method for smooth UX in frontend - to update the user in real time if their username is valid
   usernameExists = async (req, res, next) => {
-    if (!req.body['username']) {
+    let sentUsername;
+    try {
+      sentUsername = (req.body['username']).trim();
+    }
+    catch (err) { // incase sentUsername is undefined
+      sentUsername = req.body['username'];
+    }
+
+    if (!sentUsername) {
       next({ 'code': 400, 'message': 'empty username sent'});
     }
-    else if ((req.body['username']).length < 4) {
+    else if ((sentUsername).length < 4) {
       next({ 'code': 400, 'message': 'username should be more than 4 characters' });
     }
 
     try {
-      const user = await User.findOne({ 'username': req.body['username'][0] == '@' ? req.body['username'] : `@${req.body['username']}` });
-      if (user) return res.status(400).json(response(true));
+      const user = await User.findOne({ 'username': sentUsername[0] == '@' ? sentUsername : `@${sentUsername}` });
+      if (user) return res.status(200).json(response(true));
       res.status(200).json(response(false));
     }
     catch (exception) {

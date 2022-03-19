@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema({
   'username': {
     type: String,
     required: true,
-    minlength: 2,
+    minlength: 4,
     maxlength: 255,
     lowercase: true,
     trim: true,
