@@ -15,9 +15,9 @@ class UserController {
 
       // check if email or username exists before
       let user = await User.findOne({ 'username': value.username });
-      if (user) return next({ 'code': 400, 'message': 'username already exists' });
+      if (user) return next({ 'code': 409, 'message': 'username already exists' });
       user = await User.findOne({ 'email': value.email });
-      if (user) return next({ 'code': 400, 'message': 'email already exists' });
+      if (user) return next({ 'code': 409, 'message': 'email already exists' });
       
       // hash the password
       const salt = await bcrypt.genSalt(11);
