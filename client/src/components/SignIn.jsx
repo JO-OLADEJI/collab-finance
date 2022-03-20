@@ -53,7 +53,7 @@ const SignIn = (props) => {
       <form className="signup-form" autoComplete="off">
         <h3>Welcome Back.</h3>
         <div className="signup-input-wrapper">
-          <label>
+          <label className="signup-input-label">
             username <span>/</span> email
             <br />
             <input 
@@ -64,7 +64,7 @@ const SignIn = (props) => {
           </label>
         </div>
         <div className="signup-input-wrapper password-wrapper">
-          <label>
+          <label className="signup-input-label">
             password
             <br />
             <input 

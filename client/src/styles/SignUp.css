@@ -1,8 +1,8 @@
 .signup {
-  width: 60%;
+  width: 50.5rem;
   margin: auto;
-  height: 80vh;
-  margin-top: 10vh;
+  height: 33rem;
+  margin-top: 4rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -59,6 +59,7 @@
 .signup-input-wrapper label {
   font-size: .8rem;
   color: var(--grey);
+  transition: color .2s ease-out, font-weight .2s ease-out;
 }
 
 .signup-input-wrapper input {
@@ -76,7 +77,7 @@
 }
 
 ::placeholder {
-  color: var(--grey);
+  color: var(--min-grey);
   font-family: 'Fredoka', sans-serif;
   font-weight: 400;
 }
@@ -90,9 +91,13 @@
   border-bottom: 2px solid var(--deep-yellow);
 }
 
+.signup-input-wrapper:hover .signup-input-label {
+  color: var(--black);
+  font-weight: 600;
+}
+
 .signup-input-wrapper {
-  margin-bottom: .8rem;
-  /* border: 1px solid red; */
+  margin-bottom: .7rem;
   width: fit-content;
 }
 
@@ -169,26 +174,29 @@
 .password-wrapper i {
   cursor: pointer;
   transition: color .3s ease-out;
-  /* transform: translateX(-100%); */
   position: relative;
   left: -1.2rem;
 }
 
 #sign-up-validation-error {
-  color: red;
+  color: var(--warning);
   text-align: center;
   margin-top: .5rem;
   font-size: .9rem;
 }
 
 .username-wrapper i {
-  /* transform: translateX(-100%); */
   position: relative;
   left: -1rem;
 }
 
 .username-wrapper .fa-spinner {
   animation: spin .8s linear infinite;
+}
+
+.username-wrapper > p {
+  font-size: .7rem;
+  color: var(--warning);
 }
 
 @keyframes spin {

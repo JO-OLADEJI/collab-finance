@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import '../styles/SignUp.css';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { debounce } from 'lodash';
 import illustration from '../assets/signup-graphic.png';
 
 
@@ -14,19 +15,47 @@ const SignUP = (props) => {
   const [passwordType, setPasswordType] = useState('password');
   const [validationError, setValidationError] = useState('');
   const [isUsernameValid, setIsUsernameValid] = useState(false);
+  const [usernameWarning, setUsernameWarning] = useState('');
 
   useEffect(() => {
     document.title = 'Sign up | Collab Finance';
   }, []);
 
+  const usernameValidityCheck = async (value) => {
+    console.log('checking username . . .');
+
+    if (value.length === 0) {
+      setUsernameWarning(() => '');
+    }
+    else if (value.length < 4) {
+      setUsernameWarning(() => 'username should be at least 4 characters !');
+    }
+    else {
+      setUsernameWarning(() => 'checking . . .');
+      // hit the endpoint here
+    }
+  };
+  // usernameValidityCheck(username);
+
+  const debouncedFeedback = useCallback(
+    debounce(async (nextValue) => usernameValidityCheck(nextValue.trim()), 0.8 * 1000),
+    []
+  );
+
+  const handleUsernameChange = async (e) => {
+    const { value: nextValue } = e.target;
+    setUsername(nextValue.trim());
+    debouncedFeedback(nextValue);
+  }
+
   const renderUsernameFeedback = () => {
     if (username.length === 0 && !isUsernameValid) {
       return (<i 
         className="fa-solid fa-check"
-        style={{ color: '#5f5f5f' }}
+        style={{ color: '#999999' }}
       />);
     }
-    else if (!isUsernameValid) { /* check if it's communicating to the API */
+    else if (!isUsernameValid) { // check if it's communicating to the API
       return (<i 
         className="fa-solid fa-spinner"
         style={{ color: '#5f5f5f' }}
@@ -75,7 +104,7 @@ const SignUP = (props) => {
         <h3>Create your account.</h3>
         <div className="signup-names-space">
           <div className="signup-input-wrapper">
-            <label>
+            <label className="signup-input-label">
               firstname
               <br />
               <input 
@@ -87,7 +116,7 @@ const SignUP = (props) => {
             </label>
           </div>
           <div className="signup-input-wrapper">
-            <label>
+            <label className="signup-input-label">
               lastname
               <br />
               <input 
@@ -100,25 +129,21 @@ const SignUP = (props) => {
           </div>
         </div>
         <div className="signup-input-wrapper username-wrapper">
-          <label>
+          <label className="signup-input-label">
             username
             <br />
             <input 
               type="text"
               value={username}
-              onChange={(e) => {
-                setUsername((e.target.value).trim());
-                if (username.length >= 4) {
-                  // send validation request to the API
-                }
-              }}
+              onChange={async (e) => handleUsernameChange(e)}
               placeholder="@johnsmith - min. of 4 letters"
             />
           </label>
           {renderUsernameFeedback()}
+          {usernameWarning.length > 0 ? <p>{usernameWarning}</p> : null}
         </div>
         <div className="signup-input-wrapper">
-          <label>
+          <label className="signup-input-label">
             email
             <br />
             <input 
@@ -130,7 +155,7 @@ const SignUP = (props) => {
           </label>
         </div>
         <div className="signup-input-wrapper password-wrapper">
-          <label>
+          <label className="signup-input-label">
             password
             <br />
             <input 
