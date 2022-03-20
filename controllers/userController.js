@@ -94,7 +94,7 @@ class UserController {
 
     try {
       const user = await User.findById(_id);
-      if (!user) return next({ 'code': 500, 'message': 'user not found' });
+      if (!user) return next({ 'code': 400, 'message': 'user not found' });
       res
         .status(200)
         .json(response(
@@ -126,8 +126,12 @@ class UserController {
 
     try {
       const user = await User.findOne({ 'username': sentUsername[0] == '@' ? sentUsername : `@${sentUsername}` });
-      if (user) return res.status(200).json(response(true));
-      res.status(200).json(response(false));
+      if (user) {
+        return res.status(200).json(response(true));
+      }
+      else {
+        res.status(200).json(response(false));
+      }
     }
     catch (exception) {
       next({ 'code': 500, 'message': exception.message });
