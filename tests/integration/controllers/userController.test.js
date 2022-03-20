@@ -148,6 +148,45 @@ describe('/api/users', () => {
 
   describe('GET /me', () => {
     // TODO
+    let token;
+    beforeEach(async () => {
+      const user = { 
+        firstname: 'abc', 
+        lastname: 'xyz', 
+        username: 'abcxyz', 
+        email: 'abcxyz@example.com', 
+        gender: 'female', 
+        password: 'abc123xyz' 
+      };
+      await request(server).post('/api/users/').send(user); // create a user for credentials to be tested on
+      const createdUser = await User.findOne({ 'email': user['email'] });
+      token = createdUser.generateAuthToken();
+    });
+    const exec = async () => {
+      return await request(server).get('/api/users/me').set('x-auth-token', token);
+    }
+
+
+    it('should return an error with status-code 400 if token is an empty string', async () => {
+      token = '';
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('should return an error with status-code 500 if token is invalid', async () => {
+      token = 'abc';
+      const res = await exec();
+      expect(res.status).toBe(500);
+    });
+
+    it('should fetch the user info if token is valid', async () => {
+      const res = await exec();
+      expect(res).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(typeof res.body).toBe('object');
+      expect(res.body['result']['email']).toBe('abcxyz@example.com');
+    });
+
   });
 
 
